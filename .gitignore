@@ -1,0 +1,12 @@
+node_modules/
+dist/
+.DS_Store
+lib/
+*.tgz
+!public/downloads/*.tgz
+.example-check-*/
+.env
+.env.*
+!.env.example
+.openai/
+.sites-*/

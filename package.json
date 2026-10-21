@@ -1,0 +1,62 @@
+{
+  "name": "@bilacuti/react-calendar",
+  "version": "1.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite --host 0.0.0.0",
+    "build": "npm run typecheck && vite build && node scripts/prepare-site.mjs",
+    "build:lib": "vite build --config vite.lib.config.ts",
+    "typecheck": "tsc --noEmit",
+    "test": "tsx --test tests/*.test.ts",
+    "pack:lib": "npm run typecheck && npm test && npm run build:lib && npm pack",
+    "prepare:download": "node scripts/prepare-download.mjs",
+    "test:examples": "tsx scripts/check-examples.ts"
+  },
+  "dependencies": {
+    "motion": "^12.0.0"
+  },
+  "devDependencies": {
+    "@types/react": "^19.3.0",
+    "@types/react-dom": "^19.3.0",
+    "prettier": "^3.9.10",
+    "react": "^19.1.0",
+    "react-dom": "^19.1.0",
+    "tsx": "^4.23.15",
+    "typescript": "~5.9.3",
+    "vite": "^6.1.0",
+    "vite-plugin-dts": "^5.1.2"
+  },
+  "description": "Typed, reusable Malaysia public and school holiday calendar.",
+  "main": "./lib/index.js",
+  "module": "./lib/index.js",
+  "types": "./lib/index.d.ts",
+  "files": [
+    "lib",
+    "README.md",
+    "LICENSE",
+    "THIRD_PARTY_NOTICES.md",
+    "licenses"
+  ],
+  "exports": {
+    ".": {
+      "types": "./lib/index.d.ts",
+      "import": "./lib/index.js"
+    },
+    "./styles.css": "./lib/styles.css"
+  },
+  "sideEffects": [
+    "**/*.css"
+  ],
+  "peerDependencies": {
+    "react": "^18.3.0 || ^19.0.0",
+    "react-dom": "^18.3.0 || ^19.0.0"
+  },
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/qentrah/bilacuti-react-calendar.git"
+  },
+  "bugs": {
+    "url": "https://github.com/qentrah/bilacuti-react-calendar/issues"
+  }
+}
