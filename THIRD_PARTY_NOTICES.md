@@ -11,3 +11,7 @@ Geist is Copyright 2024 The Geist Project Authors. The bundled font is licensed 
 ## Runtime dependencies
 
 React, React DOM, and Motion retain their respective upstream licenses. Dependency packages include their own license files. Install them using the package manifest and lockfile.
+
+## Documentation syntax highlighting
+
+The documentation site uses [Shiki](https://shiki.style/) with its VS Code Dark+ and Light+ themes and TextMate grammars. Shiki's MIT license is included in [licenses/Shiki-MIT.txt](licenses/Shiki-MIT.txt). It is a development dependency used by the documentation site, not a runtime dependency of the published calendar components.

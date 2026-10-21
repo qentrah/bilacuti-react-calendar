@@ -6,6 +6,14 @@ import {
   generateExample,
   initialSettings,
 } from "../src/playground/model";
+import {
+  installation,
+  controlled,
+  filtered,
+  styled,
+  customDataCode,
+  defaultModel,
+} from "../src/docs/patterns";
 const temporary = mkdtempSync(resolve(".example-check-"));
 try {
   const variants = [
@@ -39,6 +47,26 @@ try {
       writeFileSync(file, generateExample(name, settings));
       files.push(file);
     }
+  const patterns = [
+    installation,
+    controlled,
+    filtered,
+    styled,
+    customDataCode(defaultModel),
+    customDataCode({
+      ...defaultModel,
+      title: 'A "quoted" event',
+      date: "2027-03-11",
+      region: "johor",
+      view: "grid",
+      theme: "light",
+    }),
+  ];
+  for (const [index, source] of patterns.entries()) {
+    const file = join(temporary, `pattern-${index}.tsx`);
+    writeFileSync(file, source);
+    files.push(file);
+  }
   execFileSync(
     resolve("node_modules/.bin/tsc"),
     [

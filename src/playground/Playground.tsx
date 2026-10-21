@@ -1,4 +1,4 @@
-import { useId, useMemo, useState } from "react";
+import { useEffect, useId, useMemo, useState } from "react";
 import {
   CalendarFooter,
   CalendarGrid,
@@ -146,30 +146,6 @@ export function PlaygroundControls({
             </select>
           </label>
         )}
-        <label>
-          {name === "HolidayCalendar" ? "Root" : "Wrapper"} padding (px)
-          <input
-            type="number"
-            min={0}
-            max={80}
-            value={s.padding}
-            onChange={(e) =>
-              set("padding", Math.max(0, Math.min(80, Number(e.target.value))))
-            }
-          />
-        </label>
-        {name === "HolidayCalendar" && (
-          <label>
-            className
-            <input
-              type="text"
-              value={s.className}
-              placeholder="Optional CSS class"
-              maxLength={100}
-              onChange={(e) => set("className", e.target.value)}
-            />
-          </label>
-        )}
         {name === "HolidayTooltip" && (
           <>
             <label>
@@ -304,6 +280,43 @@ export function PlaygroundControls({
           {bool("showJumpButton", "Jump button")}
         </fieldset>
       )}
+      <details className="playground-states">
+        <summary>Canvas styling (optional)</summary>
+        <p className="playground-note">
+          Padding only changes the space around this preview. It does not change
+          holiday data.
+        </p>
+        <div className="playground-control-grid">
+          {" "}
+          <label>
+            {name === "HolidayCalendar" ? "Root" : "Wrapper"} padding (px)
+            <input
+              type="number"
+              min={0}
+              max={80}
+              value={s.padding}
+              onChange={(e) =>
+                set(
+                  "padding",
+                  Math.max(0, Math.min(80, Number(e.target.value))),
+                )
+              }
+            />
+          </label>
+          {name === "HolidayCalendar" && (
+            <label>
+              className
+              <input
+                type="text"
+                value={s.className}
+                placeholder="Optional CSS class"
+                maxLength={100}
+                onChange={(e) => set("className", e.target.value)}
+              />
+            </label>
+          )}
+        </div>
+      </details>
       {[
         "CalendarFooter",
         "CalendarRelatedLinks",
@@ -514,9 +527,28 @@ export function PropsTable({ name }: { name: ComponentName }) {
     </details>
   );
 }
-export function usePlaygroundSettings() {
-  return useState<PlaygroundSettings>(() => ({
-    ...initialSettings,
-    states: [...initialSettings.states],
-  }));
+export function usePlaygroundSettings(name = "default") {
+  const key = `bilacuti-example-${name}`;
+  const state = useState<PlaygroundSettings>(() => {
+    try {
+      const saved = JSON.parse(sessionStorage.getItem(key) || "null");
+      if (
+        saved &&
+        [2026, 2027].includes(saved.year) &&
+        Array.isArray(saved.states)
+      )
+        return { ...initialSettings, ...saved };
+    } catch {
+      /* Storage is optional. */
+    }
+    return { ...initialSettings, states: [...initialSettings.states] };
+  });
+  useEffect(() => {
+    try {
+      sessionStorage.setItem(key, JSON.stringify(state[0]));
+    } catch {
+      /* Preview still works without storage. */
+    }
+  }, [key, state[0]]);
+  return state;
 }

@@ -2,30 +2,36 @@
 
 # Bila Cuti React Calendar
 
-A little more time off.
+Reusable Malaysian holiday components for React.
 
-[Documentation](https://qentrah.github.io/bilacuti-react-calendar/library/) · [Calendar demo](https://qentrah.github.io/bilacuti-react-calendar/) · [npm](https://www.npmjs.com/package/@qentrah/react-calendar) · [Download v1.0.0](https://qentrah.github.io/bilacuti-react-calendar/downloads/qentrah-react-calendar-1.0.0.tgz) · [Contribute](CONTRIBUTING.md)
+[Documentation](https://qentrah.github.io/bilacuti-react-calendar/library/) · [Calendar demo](https://qentrah.github.io/bilacuti-react-calendar/) · [npm](https://www.npmjs.com/package/@qentrah/react-calendar) · [Download v1.0.1](https://qentrah.github.io/bilacuti-react-calendar/downloads/qentrah-react-calendar-1.0.1.tgz) · [Contribute](CONTRIBUTING.md)
 
 ![Documentation overview with a live Malaysian holiday calendar](https://raw.githubusercontent.com/qentrah/bilacuti-react-calendar/main/docs/images/documentation.png)
 
 An independent, open-source React component library for Malaysia public and school holidays, maintained under **Qentrah**. Includes typed components, 2026–2027 holiday data, and a live playground with editable controls, props tables, and TypeScript that updates as you customize each example.
 
-## Explore the components
+## Documentation
 
-The documentation follows the calendar’s charcoal surfaces, Geist typography, and orange and blue holiday colors. Use the theme switch to browse in light or dark mode.
+Each task has its own page. Component pages have separate **Preview**, **Configure**, **Code**, and **API reference** subpages. Only the requested component is mounted. Configuration changes stay in your browser tab while you move between pages.
 
-Each component has its own linked page with a working preview, editable controls, a code view, and a props reference. Preview changes update the complete TypeScript example. Settings stay in place while you switch between components during the session. Search the sidebar to jump to a component.
+- [Install the package](https://qentrah.github.io/bilacuti-react-calendar/library/start/installation/)
+- [Themes and styling](https://qentrah.github.io/bilacuti-react-calendar/library/start/styling/)
+- [Keep calendar selections in app state](https://qentrah.github.io/bilacuti-react-calendar/library/patterns/controlled-state/)
+- [Build a regional holiday list](https://qentrah.github.io/bilacuti-react-calendar/library/patterns/filter-holidays/)
+- [Understand the custom data model](https://qentrah.github.io/bilacuti-react-calendar/library/patterns/custom-data/)
+- [Edit sample data with a live preview](https://qentrah.github.io/bilacuti-react-calendar/library/patterns/custom-data/build/)
 
-![Calendar component with preview and customization controls](https://raw.githubusercontent.com/qentrah/bilacuti-react-calendar/main/docs/images/component-playground.png)
+![Component preview on its own page](https://raw.githubusercontent.com/qentrah/bilacuti-react-calendar/main/docs/images/component-playground.png)
 
-<details>
-<summary>Light theme and mobile previews</summary>
+The Configure page changes the example, not your app or the published dataset. Calendar settings affect dates and behavior. **Canvas styling** is an optional section for preview padding and wrapper styles. The Code page includes your current selections.
 
-![Documentation in light mode](https://raw.githubusercontent.com/qentrah/bilacuti-react-calendar/main/docs/images/light-theme.png)
+![Custom holiday data editor and live calendar](https://raw.githubusercontent.com/qentrah/bilacuti-react-calendar/main/docs/images/custom-data.png)
 
-<img src="https://raw.githubusercontent.com/qentrah/bilacuti-react-calendar/main/docs/images/mobile.png" width="390" alt="Component documentation on a mobile viewport" />
+Code panels use Shiki’s VS Code Dark+ and Light+ syntax themes, with line numbers for TSX and a separate shell display for install commands. Copy buttons use the original source, without line numbers or terminal prompts.
 
-</details>
+![Highlighted TypeScript and npm commands](https://raw.githubusercontent.com/qentrah/bilacuti-react-calendar/main/docs/images/code-preview.png)
+
+The package includes Markdown guides in `docs/` for installation, controlled state, filtering, and custom datasets. The same code examples are compiled against the library declarations before publishing.
 
 ## Install
 
@@ -55,7 +61,7 @@ export function Holidays() {
 
 ## Interactive examples and props
 
-Every component on `/library/#ComponentName` has editable controls, a live preview, a props table, Reset, and Copy code in the Code view. Changes to the controls **and** changes made inside the live toolbar both update the generated TypeScript. Each example owns independent state.
+Every component has four distinct documentation subpages: Preview, Configure, Code, and API reference. Configure has editable controls and Reset. Code has Copy code. API reference has the props table. Changes to the controls **and** changes made inside the live toolbar both update the generated TypeScript. Each example owns independent state.
 
 | Component              | Playground controls                                                           | Public API                                                                          |
 | ---------------------- | ----------------------------------------------------------------------------- | ----------------------------------------------------------------------------------- |
@@ -124,14 +130,14 @@ npm run typecheck
 npm run build:lib        # ESM, CSS, and declarations in lib/
 npm run test:examples    # Compile generated snippets against package declarations
 npm run prepare:download # Package the current library for the website download
-npm run build            # Static demo and directly loadable /library/ in dist/
+npm run build            # Static demo and all documentation subpages in dist/
 ```
 
-`npm run pack:lib` also builds and creates an installable archive. `src/lib` contains the reusable library; `src/playground` contains shared playground settings, code generation, controls, and API reference metadata; `src/LibraryPage.tsx` composes the documentation page.
+`npm run pack:lib` also builds and creates an installable archive. `src/lib` contains the reusable library; `src/playground` contains shared playground settings, code generation, controls, and API reference metadata; `src/docs` contains route metadata and usage patterns; `src/LibraryPage.tsx` renders only the requested documentation page. Run `npx tsx scripts/write-guides.ts` after editing pattern snippets to refresh the packaged Markdown guides.
 
 ## GitHub Pages
 
-The workflow in `.github/workflows/pages.yml` checks pull requests and deploys successful `main` builds using GitHub Actions. It builds with `SITE_BASE_PATH=/bilacuti-react-calendar/` so links, fonts, scripts, and package downloads work under the repository path. `/library/` gets a real HTML entry point, so direct links and reloads work without an SPA fallback. For another host, omit `SITE_BASE_PATH` or set your own trailing-slash base path.
+The workflow in `.github/workflows/pages.yml` checks pull requests and deploys successful `main` builds using GitHub Actions. It builds with `SITE_BASE_PATH=/bilacuti-react-calendar/` so links, fonts, scripts, and package downloads work under the repository path. All 40 documentation routes get real HTML entry points, so nested links and reloads work without an SPA fallback. For another host, omit `SITE_BASE_PATH` or set your own trailing-slash base path.
 
 ## License and attribution
 

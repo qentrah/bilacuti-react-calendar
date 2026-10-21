@@ -1,17 +1,18 @@
 {
   "name": "@qentrah/react-calendar",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "type": "module",
   "scripts": {
     "dev": "vite --host 0.0.0.0",
-    "build": "npm run typecheck && vite build && node scripts/prepare-site.mjs",
+    "build": "npm run typecheck && vite build && tsx scripts/prepare-site.mjs",
     "build:lib": "vite build --config vite.lib.config.ts",
     "typecheck": "tsc --noEmit",
     "test": "tsx --test tests/*.test.ts",
     "pack:lib": "npm run typecheck && npm test && npm run build:lib && npm pack",
     "prepare:download": "node scripts/prepare-download.mjs",
     "test:examples": "tsx scripts/check-examples.ts",
-    "prepublishOnly": "npm run typecheck && npm test && npm run build:lib && npm run test:examples"
+    "prepublishOnly": "npm run docs:generate && npm run typecheck && npm test && npm run build:lib && npm run test:examples",
+    "docs:generate": "tsx scripts/write-guides.ts && prettier --write docs/*.md docs/patterns/*.md"
   },
   "dependencies": {
     "motion": "^12.0.0"
@@ -22,6 +23,7 @@
     "prettier": "^3.9.10",
     "react": "^19.1.0",
     "react-dom": "^19.1.0",
+    "shiki": "^4.5.0",
     "tsx": "^4.23.15",
     "typescript": "~5.9.3",
     "vite": "^6.1.0",
@@ -36,7 +38,9 @@
     "README.md",
     "LICENSE",
     "THIRD_PARTY_NOTICES.md",
-    "licenses"
+    "licenses",
+    "docs/*.md",
+    "docs/patterns/*.md"
   ],
   "exports": {
     ".": {

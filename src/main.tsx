@@ -56,7 +56,8 @@ function Demo() {
 createRoot(document.getElementById("root")!).render(
   location.pathname
     .replace(import.meta.env.BASE_URL, "/")
-    .replace(/\/$/, "") === "/library" ? (
+    .replace(/\/$/, "")
+    .startsWith("/library") ? (
     <LibraryPage />
   ) : (
     <Demo />
