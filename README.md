@@ -1,10 +1,31 @@
+<p align="center"><img src="public/brand/logo.png" width="112" height="112" alt="Bila Cuti calendar logo" /></p>
+
 # Bila Cuti React Calendar
+
+A little more time off.
+
+[Documentation](https://qentrah.github.io/bilacuti-react-calendar/library/) · [Calendar demo](https://qentrah.github.io/bilacuti-react-calendar/) · [Download v1.0.0](https://qentrah.github.io/bilacuti-react-calendar/downloads/bilacuti-react-calendar-1.0.0.tgz) · [Contribute](CONTRIBUTING.md)
+
+![Documentation overview with a live Malaysian holiday calendar](docs/images/documentation.png)
 
 An independent, open-source React component library for Malaysia public and school holidays, maintained under **Qentrah**. Includes typed components, 2026–2027 holiday data, and a live playground with editable controls, props tables, and TypeScript that updates as you customize each example.
 
-- **Playground:** https://qentrah.github.io/bilacuti-react-calendar/library/
-- **Calendar demo:** https://qentrah.github.io/bilacuti-react-calendar/
-- **Source:** https://github.com/qentrah/bilacuti-react-calendar
+## Explore the components
+
+The documentation follows the calendar’s charcoal surfaces, Geist typography, and orange and blue holiday colors. Use the theme switch to browse in light or dark mode.
+
+Each component has its own linked page with a working preview, editable controls, a code view, and a props reference. Preview changes update the complete TypeScript example. Settings stay in place while you switch between components during the session. Search the sidebar to jump to a component.
+
+![Calendar component with preview and customization controls](docs/images/component-playground.png)
+
+<details>
+<summary>Light theme and mobile previews</summary>
+
+![Documentation in light mode](docs/images/light-theme.png)
+
+<img src="docs/images/mobile.png" width="390" alt="Component documentation on a mobile viewport" />
+
+</details>
 
 ## Install
 
@@ -34,18 +55,18 @@ export function Holidays() {
 
 ## Interactive examples and props
 
-Every component on `/library/` has editable controls, a live preview, a props table, Reset, and Copy code. Changes to the controls **and** changes made inside the live toolbar both update the generated TypeScript. Each example owns independent state.
+Every component on `/library/#ComponentName` has editable controls, a live preview, a props table, Reset, and Copy code in the Code view. Changes to the controls **and** changes made inside the live toolbar both update the generated TypeScript. Each example owns independent state.
 
-| Component | Playground controls | Public API |
-| --- | --- | --- |
-| `HolidayCalendar` | Year, states, theme, view, week start, visibility, sections, padding, class | Controlled or uncontrolled calendar; optional source dataset and callbacks |
-| `CalendarToolbar` | Year, states, theme, view, week start, visibility, wrapper padding | Controlled values and required change handlers |
-| `CalendarGrid` | Year, states, theme, grid/month view, week start, visibility, wrapper padding | `year`, `events`, `view`, `weekStart`, `theme`, `idPrefix`, optional `onDateSelect` |
-| `CalendarList` | Year, states, event visibility, wrapper theme and padding | `events` |
-| `HolidayTooltip` | Event name/date/kind/regions, theme, wrapper padding | `id`, `anchor`, `events`, `theme`, `onDismiss` |
-| `CalendarRelatedLinks` | Year, wrapper theme and padding | `year` |
-| `CalendarFooter` | Wrapper theme and padding | No component props |
-| `CalendarIcon` | Icon type, wrapper color and padding | Optional `type`; omitted renders the chevron |
+| Component              | Playground controls                                                           | Public API                                                                          |
+| ---------------------- | ----------------------------------------------------------------------------- | ----------------------------------------------------------------------------------- |
+| `HolidayCalendar`      | Year, states, theme, view, week start, visibility, sections, padding, class   | Controlled or uncontrolled calendar; optional source dataset and callbacks          |
+| `CalendarToolbar`      | Year, states, theme, view, week start, visibility, wrapper padding            | Controlled values and required change handlers                                      |
+| `CalendarGrid`         | Year, states, theme, grid/month view, week start, visibility, wrapper padding | `year`, `events`, `view`, `weekStart`, `theme`, `idPrefix`, optional `onDateSelect` |
+| `CalendarList`         | Year, states, event visibility, wrapper theme and padding                     | `events`                                                                            |
+| `HolidayTooltip`       | Event name/date/kind/regions, theme, wrapper padding                          | `id`, `anchor`, `events`, `theme`, `onDismiss`                                      |
+| `CalendarRelatedLinks` | Year, wrapper theme and padding                                               | `year`                                                                              |
+| `CalendarFooter`       | Wrapper theme and padding                                                     | No component props                                                                  |
+| `CalendarIcon`         | Icon type, wrapper color and padding                                          | Optional `type`; omitted renders the chevron                                        |
 
 Wrapper controls are clearly labeled and appear as wrapper styles in the generated code. They are not invented component props. Composed components use a `<div className="bc-calendar" data-theme="dark">` wrapper. The full calendar creates that wrapper itself.
 
@@ -61,11 +82,18 @@ export function ControlledCalendar() {
   const [states, setStates] = useState(["johor", "kelantan"]);
   const [theme, setTheme] = useState<CalendarTheme>("dark");
   return (
-    <HolidayCalendar year={year} onYearChange={setYear}
-      states={states} onStatesChange={setStates}
-      theme={theme} onThemeChange={setTheme}
-      showFooter={false} showRelatedLinks={false} showJumpButton={false}
-      onDateSelect={(date, events) => console.log(date, events)} />
+    <HolidayCalendar
+      year={year}
+      onYearChange={setYear}
+      states={states}
+      onStatesChange={setStates}
+      theme={theme}
+      onThemeChange={setTheme}
+      showFooter={false}
+      showRelatedLinks={false}
+      showJumpButton={false}
+      onDateSelect={(date, events) => console.log(date, events)}
+    />
   );
 }
 ```
@@ -110,5 +138,7 @@ The workflow in `.github/workflows/pages.yml` checks pull requests and deploys s
 The independently authored implementation and documentation are licensed under [MIT](LICENSE). The bundled Geist font remains under [SIL OFL 1.1](licenses/Geist-OFL.txt). See [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md) for font, source inspiration, holiday data provenance, and dependency attribution.
 
 Inspired by [bilacuti.my](https://www.bilacuti.my/), created by [Gaddafi Rusli](https://x.com/gaddafirusli). This is an independent implementation, not the original Bilacuti repository. Holiday data is a static 2026–2027 snapshot and does not update automatically.
+
+The calendar logo in `public/brand/logo.png` was generated for this independent project and is included under the project’s MIT license. It is not the original Bilacuti brand mark. Screenshots in `docs/images/` show the running application.
 
 See [CONTRIBUTING.md](CONTRIBUTING.md) to contribute.

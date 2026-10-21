@@ -7,6 +7,7 @@ import {
 } from "./playground/Playground";
 import { generateExample, initialSettings } from "./playground/model";
 import type { ComponentName } from "./playground/model";
+import { HolidayCalendar } from "./lib";
 import "./library-page.css";
 
 interface Example {
@@ -25,7 +26,7 @@ const examples: Example[] = [
   {
     name: "CalendarToolbar",
     description: "Controlled filters and display preferences.",
-    hint: "Try the dropdowns and settings. The state below updates live.",
+    hint: "Try the dropdowns and settings, then switch to Code to see the updated state.",
   },
   {
     name: "CalendarGrid",
@@ -92,6 +93,7 @@ function CopyCode({ code, label }: { code: string; label: string }) {
 }
 function ExampleCard({ example, index }: { example: Example; index: number }) {
   const [settings, setSettings] = usePlaygroundSettings();
+  const [tab, setTab] = useState<"preview" | "code">("preview");
   const update = <K extends keyof typeof settings>(
     key: K,
     value: (typeof settings)[K],
@@ -104,166 +106,358 @@ function ExampleCard({ example, index }: { example: Example; index: number }) {
       aria-labelledby={`${example.name}-title`}
     >
       <div className="docs-example-heading">
-        <span className="docs-number">
-          {String(index + 1).padStart(2, "0")}
+        <span className="docs-eyebrow">
+          COMPONENT / {String(index + 1).padStart(2, "0")}
         </span>
-        <div>
-          <h2 id={`${example.name}-title`}>{example.name}</h2>
-          <p>{example.description}</p>
-        </div>
+        <h1 id={`${example.name}-title`}>{example.name}</h1>
+        <p>{example.description}</p>
       </div>
       <div className="docs-example-panel">
         <div className="docs-preview-heading">
-          <span>
-            <i /> Live preview
+          <div
+            className="docs-tabs"
+            role="group"
+            aria-label={`${example.name} example view`}
+          >
+            <button
+              aria-pressed={tab === "preview"}
+              onClick={() => setTab("preview")}
+            >
+              Preview
+            </button>
+            <button
+              aria-pressed={tab === "code"}
+              onClick={() => setTab("code")}
+            >
+              Code
+            </button>
+          </div>
+          <span className="docs-ts-badge">
+            {settings.theme === "light" ? "Light" : "Dark"} · React + TS
           </span>
-          <span className="docs-ts-badge">React + TypeScript</span>
         </div>
-        <PlaygroundControls
-          name={example.name}
-          settings={settings}
-          onChange={update}
-          onReset={() =>
-            setSettings({
-              ...initialSettings,
-              states: [...initialSettings.states],
-            })
-          }
-        />
-        <p className="docs-hint">
-          Controls and live interactions both update the TypeScript below.
-        </p>
-        <div
-          className={`docs-preview ${example.tall ? "docs-preview-tall" : ""}`}
-          tabIndex={example.tall ? 0 : undefined}
-          role={example.tall ? "region" : undefined}
-          aria-label={
-            example.tall ? `${example.name} scrollable preview` : undefined
-          }
-        >
-          <LivePreview
+        <div className="docs-workbench">
+          <div className="docs-stage">
+            <div hidden={tab !== "preview"}>
+              <div
+                className={`docs-preview ${example.tall ? "docs-preview-tall" : ""}`}
+                tabIndex={example.tall ? 0 : undefined}
+                role={example.tall ? "region" : undefined}
+                aria-label={
+                  example.tall
+                    ? `${example.name} scrollable preview`
+                    : undefined
+                }
+              >
+                <LivePreview
+                  name={example.name}
+                  settings={settings}
+                  onChange={update}
+                />
+              </div>
+              <p className="docs-hint">{example.hint}</p>
+            </div>
+            <div className="docs-source" hidden={tab !== "code"}>
+              <div className="docs-code-toolbar">
+                <span>{example.name}Example.tsx</span>
+                <CopyCode code={source} label={`${example.name} TypeScript`} />
+              </div>
+              <pre tabIndex={0} aria-label={`${example.name} TypeScript code`}>
+                <code>{source}</code>
+              </pre>
+              <p className="docs-hint">
+                Includes imports, state, and the stylesheet. Changes to the
+                preview update this example.
+              </p>
+            </div>
+          </div>
+          <PlaygroundControls
             name={example.name}
             settings={settings}
             onChange={update}
+            onReset={() =>
+              setSettings({
+                ...initialSettings,
+                states: [...initialSettings.states],
+              })
+            }
           />
         </div>
-        <PropsTable name={example.name} />
-        <details className="docs-source" open>
-          <summary>TypeScript source</summary>
-          <div className="docs-code-toolbar">
-            <span>{example.name}Example.tsx</span>
-            <CopyCode code={source} label={`${example.name} TypeScript`} />
-          </div>
-          <pre tabIndex={0} aria-label={`${example.name} TypeScript code`}>
-            <code>{source}</code>
-          </pre>
-        </details>
       </div>
+      <div className="docs-api-heading">
+        <h2>API reference</h2>
+        <p>
+          Component props and their defaults. Preview wrapper styles are listed
+          separately in the controls.
+        </p>
+      </div>
+      <PropsTable name={example.name} />
     </section>
   );
 }
-export function LibraryPage() {
-  useEffect(() => {
-    document.title = "Component library · Bila Cuti";
-  }, []);
+const base = import.meta.env.BASE_URL;
+const repository = "https://github.com/qentrah/bilacuti-react-calendar";
+const install = "npm install ./bilacuti-react-calendar-1.0.0.tgz";
+const quickstart = `import { HolidayCalendar } from "@bilacuti/react-calendar";
+import "@bilacuti/react-calendar/styles.css";
+
+export default function App() {
   return (
-    <div className="docs-page">
+    <HolidayCalendar
+      defaultYear={2026}
+      defaultStates={["johor", "kelantan"]}
+      showJumpButton={false}
+    />
+  );
+}`;
+export function LibraryPage() {
+  const [active, setActive] = useState(
+    () => decodeURIComponent(location.hash.slice(1)) || "overview",
+  );
+  const [query, setQuery] = useState("");
+  const [theme, setTheme] = useState<"dark" | "light">("dark");
+  useEffect(() => {
+    const change = () => {
+      if (location.hash === "#docs-content") return;
+      setActive(decodeURIComponent(location.hash.slice(1)) || "overview");
+      window.scrollTo(0, 0);
+    };
+    window.addEventListener("hashchange", change);
+    return () => window.removeEventListener("hashchange", change);
+  }, []);
+  const selected = examples.some((e) => e.name === active)
+    ? active
+    : "overview";
+  useEffect(() => {
+    document.title = `${selected === "overview" ? "Documentation" : selected} · Bila Cuti`;
+  }, [selected]);
+  return (
+    <div className="docs-page" data-theme={theme}>
+      <a className="docs-skip" href="#docs-content">
+        Skip to content
+      </a>
       <header className="docs-topbar">
-        <a href={import.meta.env.BASE_URL} className="docs-brand">
-          bila<span>cuti</span>
-          <span className="docs-brand-divider">/</span>
-          <span className="docs-brand-label">Components</span>
+        <a href="#overview" className="docs-brand">
+          <img src={`${base}brand/logo.png`} width="32" height="32" alt="" />
+          <span>bila cuti</span>
+          <span className="docs-brand-label">/ docs</span>
         </a>
-        <a
-          href={`${import.meta.env.BASE_URL}?state=johor%2Ckelantan`}
-          className="docs-demo-link"
-        >
-          Open calendar <span aria-hidden="true">↗</span>
-        </a>
+        <div className="docs-top-actions">
+          <a href={repository}>GitHub ↗</a>
+          <button
+            className="docs-theme"
+            onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
+            aria-label={`Switch documentation to ${theme === "dark" ? "light" : "dark"} theme`}
+          >
+            {theme === "dark" ? "☼" : "☾"}
+          </button>
+          <a className="docs-demo-link" href={`${base}?state=johor%2Ckelantan`}>
+            Calendar ↗
+          </a>
+        </div>
       </header>
       <div className="docs-layout">
         <aside className="docs-sidebar">
-          <nav aria-label="Component library">
-            <a className="docs-overview" href="#overview">
-              Getting started
+          <nav aria-label="Documentation">
+            <label className="docs-search">
+              <span className="playground-sr-only">Find a component</span>
+              <input
+                type="search"
+                placeholder="Find a component…"
+                value={query}
+                onChange={(e) => setQuery(e.target.value)}
+              />
+            </label>
+            <p>DOCUMENTATION</p>
+            <a
+              aria-current={selected === "overview" ? "page" : undefined}
+              href="#overview"
+            >
+              Overview
             </a>
             <p>
               COMPONENTS <span>08</span>
             </p>
-            {examples.map((e) => (
-              <a href={`#${e.name}`} key={e.name}>
-                {e.name}
-              </a>
-            ))}
+            {examples
+              .filter((e) => e.name.toLowerCase().includes(query.toLowerCase()))
+              .map((e) => (
+                <a
+                  aria-current={selected === e.name ? "page" : undefined}
+                  href={`#${e.name}`}
+                  key={e.name}
+                >
+                  <i
+                    className={e.name.includes("Holiday") ? "orange" : "blue"}
+                  />
+                  {e.name}
+                </a>
+              ))}
+            {query &&
+              !examples.some((e) =>
+                e.name.toLowerCase().includes(query.toLowerCase()),
+              ) && (
+                <span className="docs-empty" role="status">
+                  No components found.
+                </span>
+              )}
             <div className="docs-sidebar-note">
-              <span className="docs-ts-badge">v1.0.0</span>
-              <p>
-                Typed components.
-                <br />
-                Scoped styles.
-                <br />
-                Your application state.
-              </p>
+              <span>v1.0.0</span>
+              <span>MIT license</span>
+              <a href={`${repository}/issues`}>Report an issue ↗</a>
             </div>
           </nav>
         </aside>
-        <main className="docs-main">
-          <section className="docs-intro" id="overview">
-            <span className="docs-eyebrow">BILA CUTI / REACT LIBRARY</span>
-            <h1>
-              Build with
-              <br />
-              <span>every component.</span>
-            </h1>
-            <p>
-              Explore the calendar in pieces. Live examples, editable props, and
-              TypeScript you can copy into your own app.
-            </p>
-            <div className="docs-intro-meta">
-              <span>
-                <i /> 8 live examples
-              </span>
-              <span>React 18.3+ / 19</span>
-              <span>TypeScript</span>
-            </div>
-          </section>
-          <section className="docs-install" aria-labelledby="install-title">
-            <div>
-              <h2 id="install-title">Start with the package</h2>
+        <main className="docs-main" id="docs-content" tabIndex={-1}>
+          <div hidden={selected !== "overview"}>
+            <section className="docs-intro" id="overview">
+              <span className="docs-eyebrow">BILA CUTI / REACT CALENDAR</span>
+              <h1>
+                A little more
+                <br />
+                <span>time off.</span>
+              </h1>
               <p>
-                Download the archive, install it locally, then copy any example
-                below.
+                Malaysia’s public and school holidays, in a calendar you can
+                make your own.
               </p>
-            </div>
-            <a
-              className="docs-download"
-              href={`${import.meta.env.BASE_URL}downloads/bilacuti-react-calendar-1.0.0.tgz`}
-              download
+              <div className="docs-intro-actions">
+                <a className="docs-primary" href="#HolidayCalendar">
+                  Explore the calendar <span>→</span>
+                </a>
+                <a href={repository}>View source ↗</a>
+              </div>
+            </section>
+            <section
+              className="docs-overview-preview"
+              aria-label="Interactive calendar preview"
             >
-              Download package ↓
-            </a>
-            <div className="docs-install-command">
-              <code>npm install ./bilacuti-react-calendar-1.0.0.tgz</code>
-              <CopyCode
-                code="npm install ./bilacuti-react-calendar-1.0.0.tgz"
-                label="install command"
-              />
-            </div>
-            <p className="docs-install-note">
-              Install React and React DOM in your app. Import the library
-              stylesheet once. Individually composed components use a{" "}
-              <code>.bc-calendar</code> wrapper, as shown in each example.
-            </p>
-          </section>
+              <div className="docs-preview-heading">
+                <span>
+                  <i />
+                  Live calendar
+                </span>
+                <span className="docs-ts-badge">2026 — 2027</span>
+              </div>
+              <div
+                className="docs-overview-calendar"
+                tabIndex={0}
+                role="region"
+                aria-label="Scrollable calendar demo"
+              >
+                <HolidayCalendar
+                  defaultStates={["johor", "kelantan"]}
+                  theme={theme}
+                  showFooter={false}
+                  showRelatedLinks={false}
+                  showJumpButton={false}
+                  style={{ padding: "32px 24px" }}
+                />
+              </div>
+              <div className="docs-preview-caption">
+                <span>
+                  <i className="orange" /> Public holidays
+                </span>
+                <span>
+                  <i className="blue" /> School holidays
+                </span>
+                <a href="#HolidayCalendar">Customize →</a>
+              </div>
+            </section>
+            <section className="docs-install" aria-labelledby="install-title">
+              <div className="docs-section-label">01 / GET STARTED</div>
+              <h2 id="install-title">Add it to your app</h2>
+              <p>
+                Download the package archive, then install it in your React
+                project. Supports React 18.3 and 19.
+              </p>
+              <a
+                className="docs-download"
+                href={`${base}downloads/bilacuti-react-calendar-1.0.0.tgz`}
+                download
+              >
+                Download v1.0.0 ↓
+              </a>
+              <div className="docs-install-command">
+                <code>{install}</code>
+                <CopyCode code={install} label="install command" />
+              </div>
+              <p className="docs-install-note">
+                Distributed as an archive. This package is not published on npm.
+              </p>
+              <div className="docs-source">
+                <div className="docs-code-toolbar">
+                  <span>App.tsx</span>
+                  <CopyCode code={quickstart} label="quick start TypeScript" />
+                </div>
+                <pre tabIndex={0} aria-label="Quick start TypeScript">
+                  <code>{quickstart}</code>
+                </pre>
+              </div>
+            </section>
+            <section className="docs-composition">
+              <div className="docs-section-label">02 / COMPOSE</div>
+              <h2>
+                Use the whole calendar.
+                <br />
+                Or just the pieces you need.
+              </h2>
+              <div className="docs-component-index">
+                {examples.map((e, i) => (
+                  <a href={`#${e.name}`} key={e.name}>
+                    <span className="docs-index-number">
+                      {String(i + 1).padStart(2, "0")}
+                    </span>
+                    <span>
+                      <strong>{e.name}</strong>
+                      <small>{e.description}</small>
+                    </span>
+                    <span aria-hidden="true">↗</span>
+                  </a>
+                ))}
+              </div>
+            </section>
+            <section className="docs-notes">
+              <div>
+                <h2>Styling & composition</h2>
+                <p>
+                  Import the stylesheet once. Standalone components belong
+                  inside a <code>.bc-calendar</code> wrapper with{" "}
+                  <code>data-theme="dark"</code> or <code>"light"</code>. The
+                  full calendar adds its own wrapper.
+                </p>
+                <p>
+                  Each component page includes editable controls, a working
+                  preview, a props table, and complete TypeScript.
+                </p>
+              </div>
+              <div>
+                <h2>Holiday data</h2>
+                <p>
+                  Includes a static 2026–2027 Malaysia holiday dataset. Select
+                  states to filter regional dates, or supply your own{" "}
+                  <code>HolidayDataset</code>.
+                </p>
+                <p>
+                  Dates do not update automatically. Annual leave suggestions
+                  use a simple long-weekend heuristic. Check official
+                  announcements before making plans.
+                </p>
+              </div>
+            </section>
+          </div>
           {examples.map((example, index) => (
-            <ExampleCard key={example.name} example={example} index={index} />
+            <div hidden={selected !== example.name} key={example.name}>
+              <ExampleCard example={example} index={index} />
+            </div>
           ))}
           <footer className="docs-bottom">
-            <span>Bila Cuti component library</span>
-            <a href="https://github.com/qentrah/bilacuti-react-calendar">
-              Source on GitHub ↗
+            <span>
+              Bila Cuti <span className="docs-footer-muted">by Qentrah</span>
+            </span>
+            <a href={`${repository}/blob/main/THIRD_PARTY_NOTICES.md`}>
+              Credits & licenses ↗
             </a>
-            <a href="#overview">Back to top ↑</a>
+            <a href={repository}>Contribute ↗</a>
           </footer>
         </main>
       </div>
