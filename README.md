@@ -1,12 +1,12 @@
-<p align="center"><img src="public/brand/logo.png" width="112" height="112" alt="Bila Cuti calendar logo" /></p>
+<p align="center"><img src="https://raw.githubusercontent.com/qentrah/bilacuti-react-calendar/main/public/brand/logo.png" width="112" height="112" alt="Bila Cuti calendar logo" /></p>
 
 # Bila Cuti React Calendar
 
 A little more time off.
 
-[Documentation](https://qentrah.github.io/bilacuti-react-calendar/library/) · [Calendar demo](https://qentrah.github.io/bilacuti-react-calendar/) · [Download v1.0.0](https://qentrah.github.io/bilacuti-react-calendar/downloads/bilacuti-react-calendar-1.0.0.tgz) · [Contribute](CONTRIBUTING.md)
+[Documentation](https://qentrah.github.io/bilacuti-react-calendar/library/) · [Calendar demo](https://qentrah.github.io/bilacuti-react-calendar/) · [npm](https://www.npmjs.com/package/@qentrah/react-calendar) · [Download v1.0.0](https://qentrah.github.io/bilacuti-react-calendar/downloads/qentrah-react-calendar-1.0.0.tgz) · [Contribute](CONTRIBUTING.md)
 
-![Documentation overview with a live Malaysian holiday calendar](docs/images/documentation.png)
+![Documentation overview with a live Malaysian holiday calendar](https://raw.githubusercontent.com/qentrah/bilacuti-react-calendar/main/docs/images/documentation.png)
 
 An independent, open-source React component library for Malaysia public and school holidays, maintained under **Qentrah**. Includes typed components, 2026–2027 holiday data, and a live playground with editable controls, props tables, and TypeScript that updates as you customize each example.
 
@@ -16,31 +16,31 @@ The documentation follows the calendar’s charcoal surfaces, Geist typography, 
 
 Each component has its own linked page with a working preview, editable controls, a code view, and a props reference. Preview changes update the complete TypeScript example. Settings stay in place while you switch between components during the session. Search the sidebar to jump to a component.
 
-![Calendar component with preview and customization controls](docs/images/component-playground.png)
+![Calendar component with preview and customization controls](https://raw.githubusercontent.com/qentrah/bilacuti-react-calendar/main/docs/images/component-playground.png)
 
 <details>
 <summary>Light theme and mobile previews</summary>
 
-![Documentation in light mode](docs/images/light-theme.png)
+![Documentation in light mode](https://raw.githubusercontent.com/qentrah/bilacuti-react-calendar/main/docs/images/light-theme.png)
 
-<img src="docs/images/mobile.png" width="390" alt="Component documentation on a mobile viewport" />
+<img src="https://raw.githubusercontent.com/qentrah/bilacuti-react-calendar/main/docs/images/mobile.png" width="390" alt="Component documentation on a mobile viewport" />
 
 </details>
 
 ## Install
 
-This package is distributed as an installable archive; it is **not published to the npm registry**. Download `bilacuti-react-calendar-1.0.0.tgz` from the playground and install it alongside React:
+Install the public package from [npm](https://www.npmjs.com/package/@qentrah/react-calendar):
 
 ```sh
 npm install react react-dom
-npm install ./bilacuti-react-calendar-1.0.0.tgz
+npm install @qentrah/react-calendar
 ```
 
-React 18.3 or React 19 is supported. The archive includes ESM, TypeScript declarations, scoped CSS, and the Geist font with its license. No Tailwind setup or external font service is needed.
+React 18.3 or React 19 is supported. The package includes ESM, TypeScript declarations, scoped CSS, and the Geist font with its license. No Tailwind setup or external font service is needed.
 
 ```tsx
-import { HolidayCalendar } from "@bilacuti/react-calendar";
-import "@bilacuti/react-calendar/styles.css";
+import { HolidayCalendar } from "@qentrah/react-calendar";
+import "@qentrah/react-calendar/styles.css";
 
 export function Holidays() {
   return (
@@ -74,8 +74,8 @@ Wrapper controls are clearly labeled and appear as wrapper styles in the generat
 
 ```tsx
 import { useState } from "react";
-import { HolidayCalendar, type CalendarTheme } from "@bilacuti/react-calendar";
-import "@bilacuti/react-calendar/styles.css";
+import { HolidayCalendar, type CalendarTheme } from "@qentrah/react-calendar";
+import "@qentrah/react-calendar/styles.css";
 
 export function ControlledCalendar() {
   const [year, setYear] = useState(2026);
@@ -142,3 +142,7 @@ Inspired by [bilacuti.my](https://www.bilacuti.my/), created by [Gaddafi Rusli](
 The calendar logo in `public/brand/logo.png` was generated for this independent project and is included under the project’s MIT license. It is not the original Bilacuti brand mark. Screenshots in `docs/images/` show the running application.
 
 See [CONTRIBUTING.md](CONTRIBUTING.md) to contribute.
+
+## Publish a release
+
+Maintainers can publish a new version with `npm version patch` followed by `npm publish`. The `prepublishOnly` script runs type checks, regression tests, the library build, and generated-example compilation before publishing. Publishing credentials belong in your local npm configuration; never commit tokens. Push the version commit and tag after a successful release, then rebuild the site download.

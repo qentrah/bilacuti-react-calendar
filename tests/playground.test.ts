@@ -60,7 +60,7 @@ test("props reference covers every public component interface without invented p
 test("generated examples are standalone package consumers with a single exported example", () => {
   for (const name of componentNames) {
     const source = generateExample(name, initialSettings);
-    assert.ok(source.includes("@bilacuti/react-calendar"));
+    assert.ok(source.includes("@qentrah/react-calendar"));
     assert.ok(!source.includes("../lib"));
     assert.equal(
       (source.match(/export default function Example/g) ?? []).length,

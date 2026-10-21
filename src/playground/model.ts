@@ -273,11 +273,11 @@ export function generateExample(
   const visibility = `{ public: ${s.public}, school: ${s.school}, annualLeave: ${s.annualLeave} }`;
   const wrapper = `className="bc-calendar" data-theme=${json(s.theme)} style={{ padding: ${s.padding}, margin: "auto" }}`;
   const imports = (values: string, react = "") =>
-    `import "@bilacuti/react-calendar/styles.css";\n${react ? `import { ${react} } from "react";\n` : ""}import { ${values} } from "@bilacuti/react-calendar";\n`;
+    `import "@qentrah/react-calendar/styles.css";\n${react ? `import { ${react} } from "react";\n` : ""}import { ${values} } from "@qentrah/react-calendar";\n`;
   const eventFilter = `const events = filterCalendarEvents(malaysiaHolidayData[${s.year}], ${json(s.states)}, ${visibility});`;
   const state = `  const [year, setYear] = useState(${s.year});\n  const [states, setStates] = useState<string[]>(${json(s.states)});\n  const [theme, setTheme] = useState<CalendarTheme>(${json(s.theme)});\n  const [view, setView] = useState<CalendarView>(${json(s.view)});\n  const [weekStart, setWeekStart] = useState<WeekStart>(${json(s.weekStart)});\n  const [visibility, setVisibility] = useState<HolidayVisibility>(${visibility});`;
   const typeImports =
-    'import type { CalendarTheme, CalendarView, WeekStart, HolidayVisibility } from "@bilacuti/react-calendar";\n';
+    'import type { CalendarTheme, CalendarView, WeekStart, HolidayVisibility } from "@qentrah/react-calendar";\n';
   if (name === "HolidayCalendar")
     return (
       imports(name, "useState") +
@@ -306,7 +306,7 @@ export function generateExample(
   if (name === "HolidayTooltip")
     return (
       imports(name, "useId, useState") +
-      'import type { CalendarEvent } from "@bilacuti/react-calendar";\n' +
+      'import type { CalendarEvent } from "@qentrah/react-calendar";\n' +
       `\nconst events: CalendarEvent[] = [{ name: ${json(s.title)}, date: ${json(s.date)}, kind: ${json(s.kind)}, regions: ${json(s.states.length ? s.states : ["nationwide"])} }];\n\nexport default function Example() {\n  const id = useId();\n  const [anchor, setAnchor] = useState<HTMLButtonElement | null>(null);\n  return <div ${wrapper}>\n    <button type="button" aria-describedby={anchor ? id : undefined}\n      onBlur={() => setAnchor(null)}\n      onClick={event => setAnchor(anchor ? null : event.currentTarget)}\n      style={{ padding: 12, border: "1px solid #e85d04", borderRadius: 8 }}>\n      ${s.date} · View holiday\n    </button>\n    {anchor && <HolidayTooltip id={id} anchor={anchor} events={events}\n      theme=${json(s.theme)} onDismiss={() => setAnchor(null)} />}\n  </div>;\n}\n`
     );
   if (name === "CalendarRelatedLinks")

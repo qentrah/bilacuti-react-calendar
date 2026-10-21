@@ -197,9 +197,9 @@ function ExampleCard({ example, index }: { example: Example; index: number }) {
 }
 const base = import.meta.env.BASE_URL;
 const repository = "https://github.com/qentrah/bilacuti-react-calendar";
-const install = "npm install ./bilacuti-react-calendar-1.0.0.tgz";
-const quickstart = `import { HolidayCalendar } from "@bilacuti/react-calendar";
-import "@bilacuti/react-calendar/styles.css";
+const install = "npm install @qentrah/react-calendar";
+const quickstart = `import { HolidayCalendar } from "@qentrah/react-calendar";
+import "@qentrah/react-calendar/styles.css";
 
 export default function App() {
   return (
@@ -367,22 +367,29 @@ export function LibraryPage() {
               <div className="docs-section-label">01 / GET STARTED</div>
               <h2 id="install-title">Add it to your app</h2>
               <p>
-                Download the package archive, then install it in your React
-                project. Supports React 18.3 and 19.
+                Install from npm in your React project. Supports React 18.3 and
+                19.
               </p>
               <a
                 className="docs-download"
-                href={`${base}downloads/bilacuti-react-calendar-1.0.0.tgz`}
+                href={`${base}downloads/qentrah-react-calendar-1.0.0.tgz`}
                 download
               >
                 Download v1.0.0 ↓
+              </a>
+              <a
+                className="docs-download"
+                href="https://www.npmjs.com/package/@qentrah/react-calendar"
+              >
+                View on npm ↗
               </a>
               <div className="docs-install-command">
                 <code>{install}</code>
                 <CopyCode code={install} label="install command" />
               </div>
               <p className="docs-install-note">
-                Distributed as an archive. This package is not published on npm.
+                Public on npm as @qentrah/react-calendar. Import the stylesheet
+                once in your app.
               </p>
               <div className="docs-source">
                 <div className="docs-code-toolbar">

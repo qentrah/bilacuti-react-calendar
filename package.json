@@ -1,5 +1,5 @@
 {
-  "name": "@bilacuti/react-calendar",
+  "name": "@qentrah/react-calendar",
   "version": "1.0.0",
   "type": "module",
   "scripts": {
@@ -10,7 +10,8 @@
     "test": "tsx --test tests/*.test.ts",
     "pack:lib": "npm run typecheck && npm test && npm run build:lib && npm pack",
     "prepare:download": "node scripts/prepare-download.mjs",
-    "test:examples": "tsx scripts/check-examples.ts"
+    "test:examples": "tsx scripts/check-examples.ts",
+    "prepublishOnly": "npm run typecheck && npm test && npm run build:lib && npm run test:examples"
   },
   "dependencies": {
     "motion": "^12.0.0"
@@ -58,5 +59,18 @@
   },
   "bugs": {
     "url": "https://github.com/qentrah/bilacuti-react-calendar/issues"
-  }
+  },
+  "publishConfig": {
+    "access": "public",
+    "registry": "https://registry.npmjs.org/"
+  },
+  "homepage": "https://qentrah.github.io/bilacuti-react-calendar/library/",
+  "keywords": [
+    "react",
+    "calendar",
+    "malaysia",
+    "holidays",
+    "typescript",
+    "bilacuti"
+  ]
 }
